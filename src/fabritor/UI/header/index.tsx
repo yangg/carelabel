@@ -22,7 +22,7 @@ export default function () {
       <Logo />
       <CenterV
         justify="space-between"
-        style={{ flex: 1 }}
+        style={{ flex: 1, marginLeft: 15 }}
       >
         <BaseInfo />
         <Toolbar />

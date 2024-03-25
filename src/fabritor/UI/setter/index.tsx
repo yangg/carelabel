@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { Divider, Layout, Typography } from 'antd';
+import { Divider, Form, Input, Layout, Select, Typography } from 'antd';
 import { GloablStateContext } from '@/context';
-import { SKETCH_ID } from '@/utils/constants';
+import { FONT_PRESET_FAMILY_LIST, SKETCH_ID } from '@/utils/constants';
 import SketchSetter from './SketchSetter';
 import TextSetter from './TextSetter';
 import ImageSetter from './ImageSetter';
@@ -12,6 +12,11 @@ import GroupSetter from './GroupSetter';
 import PathSetter from './PathSetter';
 import RoughSetter from './RoughSetter';
 import { SETTER_WIDTH } from '@/config';
+import SliderInputNumber from "@/fabritor/components/SliderInputNumber";
+import ColorSetter from "@/fabritor/UI/setter/ColorSetter";
+import AlignSetter from "@/fabritor/UI/setter/TextSetter/AlignSetter";
+import FontStyleSetter from "@/fabritor/UI/setter/TextSetter/FontStyleSetter";
+import FormItem from "antd/es/form/FormItem";
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -38,7 +43,7 @@ export default function Setter () {
       case 'circle':
       case 'triangle':
       case 'polygon':
-      case 'ellipse':  
+      case 'ellipse':
         return <ShapeSetter />;
       case 'f-line':
       case 'f-arrow':
@@ -87,7 +92,7 @@ export default function Setter () {
       case 'circle':
       case 'triangle':
       case 'polygon':
-      case 'ellipse':  
+      case 'ellipse':
         return '形状';
       case 'line':
       case 'f-line':
@@ -138,6 +143,12 @@ export default function Setter () {
       width={SETTER_WIDTH}
       className="fabritor-sider"
     >
+        <FormItem
+            label="Name"
+            style={{padding: 15}}
+        >
+          <Input/>
+        </FormItem>
       {renderSetterTitle()}
       <div
         style={{ padding: 16 }}

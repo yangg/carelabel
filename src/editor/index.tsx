@@ -80,7 +80,7 @@ export default class Editor {
 
   private _initSketch () {
     // 默认小红书尺寸
-    const { width = 1242, height = 1660 } = this._template || {};
+    const { width = 400, height = 950 } = this._template || {};
     const sketch = new fabric.Rect({
       fill: '#ffffff',
       left: 0,
@@ -90,10 +90,10 @@ export default class Editor {
       selectable: false,
       hasControls: false,
       hoverCursor: 'default',
-      // @ts-ignore custom id 
+      // @ts-ignore custom id
       id: SKETCH_ID,
       // @ts-ignore custom desc
-      fabritor_desc: '我的画板 by fabritor',
+      fabritor_desc: 'Jack label1',
     });
     this.canvas.add(sketch);
     this.canvas.requestRenderAll();
@@ -140,7 +140,7 @@ export default class Editor {
     const viewportTransform = this.canvas.viewportTransform;
     // @ts-ignore 平移
     viewportTransform[4] = this.canvas.width / 2 - sketchCenter.x * viewportTransform[0];
-    // @ts-ignore 平移 
+    // @ts-ignore 平移
     viewportTransform[5] = this.canvas.height / 2 - sketchCenter.y * viewportTransform[3];
     // @ts-ignore
     this.canvas.setViewportTransform(viewportTransform);
