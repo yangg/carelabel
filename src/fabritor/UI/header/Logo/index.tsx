@@ -1,6 +1,5 @@
 import { LOGO_ICON } from '@/assets/icon';
 import { CenterV } from '@/fabritor/components/Center';
-import { PANEL_WIDTH } from '@/config';
 
 export default function Logo () {
   return (

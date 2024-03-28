@@ -12,11 +12,6 @@ import GroupSetter from './GroupSetter';
 import PathSetter from './PathSetter';
 import RoughSetter from './RoughSetter';
 import { SETTER_WIDTH } from '@/config';
-import SliderInputNumber from "@/fabritor/components/SliderInputNumber";
-import ColorSetter from "@/fabritor/UI/setter/ColorSetter";
-import AlignSetter from "@/fabritor/UI/setter/TextSetter/AlignSetter";
-import FontStyleSetter from "@/fabritor/UI/setter/TextSetter/FontStyleSetter";
-import FormItem from "antd/es/form/FormItem";
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -143,12 +138,6 @@ export default function Setter () {
       width={SETTER_WIDTH}
       className="fabritor-sider"
     >
-        <FormItem
-            label="Name"
-            style={{padding: 15}}
-        >
-          <Input/>
-        </FormItem>
       {renderSetterTitle()}
       <div
         style={{ padding: 16 }}

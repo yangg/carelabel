@@ -108,6 +108,7 @@ export const SKETCH_ID = 'fabritor-sketch';
 
 export const FABRITOR_CUSTOM_PROPS = [
   'id',
+    'key',
   'fabritor_desc',
   'selectable',
   'hasControls',

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { fabric } from 'fabric';
-import { Form, Select } from 'antd';
+import { Form, Input, Select } from 'antd';
 import { FONT_PRESET_FAMILY_LIST } from '@/utils/constants';
 import { GloablStateContext } from '@/context';
 import FontStyleSetter from './FontStyleSetter';
@@ -48,7 +48,7 @@ export default function TextSetter () {
 
   const handleFill = (_fill) => {
     let fill = transformColors2Fill(_fill);
-    // text gradient nor support percentage https://github.com/fabricjs/fabric.js/issues/8168  
+    // text gradient nor support percentage https://github.com/fabricjs/fabric.js/issues/8168
     if (typeof fill !== 'string') {
       fill.gradientUnits = 'pixels';
       const { coords } = fill;
@@ -90,11 +90,12 @@ export default function TextSetter () {
           object.setSelectionStyles({ fill: values[key] });
         } else {
           object.set('styles', {});
+          console.log(222, key, values[key])
           object.set(key, values[key]);
         }
       }
     }
-   
+
     editor.canvas.requestRenderAll();
     editor.fireCustomModifiedEvent();
   }
@@ -131,6 +132,12 @@ export default function TextSetter () {
         onValuesChange={handleValuesChange}
         colon={false}
       >
+        <FormItem
+          name="key"
+          label="Name"
+        >
+          <Input />
+        </FormItem>
         <FormItem
           name="fontFamily"
           label="字体"
@@ -183,7 +190,7 @@ export default function TextSetter () {
           />
         </FormItem>
       </Form>
-      <FList 
+      <FList
         dataSource={TEXT_ADVANCE_CONFIG}
         renderItemChildren={(item) => (
           <>
