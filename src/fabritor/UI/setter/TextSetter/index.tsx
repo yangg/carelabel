@@ -90,7 +90,6 @@ export default function TextSetter () {
           object.setSelectionStyles({ fill: values[key] });
         } else {
           object.set('styles', {});
-          console.log(222, key, values[key])
           object.set(key, values[key]);
         }
       }
@@ -121,7 +120,8 @@ export default function TextSetter () {
       border: {
         stroke: object.stroke,
         strokeWidth: object.strokeWidth
-      }
+      },
+      key: object.key,
     });
   }, [object]);
 
