@@ -12,6 +12,7 @@ import GroupSetter from './GroupSetter';
 import PathSetter from './PathSetter';
 import RoughSetter from './RoughSetter';
 import { SETTER_WIDTH } from '@/config';
+import QrCodeSetter from "./QrCodeSetter";
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -58,6 +59,8 @@ export default function Setter () {
         return <GroupSetter />;
       case 'activeSelection':
         return <GroupSetter />;
+      case 'image':
+        return <QrCodeSetter />;
       default:
         return null;
     }

@@ -29,6 +29,10 @@ export default function QRCodePanel (props) {
     const img = new Image();
     img.onload = () => {
       createImage({
+        qrInfo: {
+          value: form.getFieldValue('value'),
+          size: form.getFieldValue('size'),
+        },
         imageSource: img,
         canvas: editor.canvas
       });
@@ -94,11 +98,10 @@ export default function QRCodePanel (props) {
       />
       {
         QRCodeConfig.value ?
-        <Flex vertical align="center" gap={10} style={{ marginTop: 16 }} ref={qrRef}> 
+        <Flex vertical align="center" gap={10} style={{ marginTop: 16 }} ref={qrRef}>
           <QRCode
             type="canvas"
             {...QRCodeConfig}
-            style={{ maxWidth: 200 }}
           />
           <Button type="primary" onClick={add2Canvas}>添加至画布</Button>
         </Flex> : null
