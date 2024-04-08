@@ -98,6 +98,9 @@ const load = async (init: boolean = false, stat?: string) => {
   const res = await api.home.getTempList({ search: state.searchKeyword, ...pageOptions })
   res.list.length <= 0 && (state.loadDone = true)
   state.list = state.list.concat(res.list)
+  if(res.total <= state.list.length) {
+    state.loadDone = true
+  }
   setTimeout(() => {
     state.loading = false
     checkHeight()
@@ -134,9 +137,9 @@ async function selectItem(item: IGetTempListData) {
   let result = null
   if (!item.data) {
     const res = await api.home.getTempDetail({ id: item.id })
-    result = JSON.parse(res.data)
+    result = res.data
   } else {
-    result = JSON.parse(item.data)
+    result = item.data
   }
   const { page, widgets } = result
   pageStore.setDPage(page)

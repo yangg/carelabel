@@ -124,7 +124,7 @@ type TSaveWorksParams = {
   temp_id?: string
   width: number
   height: number
-  data: string
+  data: object
   cover?: string
   id?: string | number
 }
