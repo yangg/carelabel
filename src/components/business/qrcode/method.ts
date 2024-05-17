@@ -1,7 +1,7 @@
 /*
  * @Author: Jeremy Yu
  * @Date: 2024-03-04 18:10:00
- * @Description:  
+ * @Description:
  * @LastEditors: Jeremy Yu <https://github.com/JeremyYu-cn>
  * @Date: 2024-03-04 18:10:00
  */
@@ -24,7 +24,7 @@ export function generateOption(props: TQrcodeProps): Options {
     },
     imageOptions: {
       hideBackgroundDots: true,
-      imageSize: 0.4,
+      imageSize: 0.75,
       margin: 6,
       crossOrigin: 'anonymous',
     },

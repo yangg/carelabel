@@ -1,7 +1,7 @@
 <!--
  * @Author: ShawnPhang
  * @Date: 2023-09-18 17:34:44
- * @Description: 
+ * @Description:
  * @LastEditors: ShawnPhang <https://m.palxp.cn>
  * @LastUpdateContent: Support typescript
  * @LastEditTime: 2024-04-05 05:34:43
@@ -25,6 +25,7 @@
           <el-divider direction="vertical" />
         </div>
         <HeaderOptions ref="optionsRef" v-model="state.isContinue" @change="optionsChange">
+          <el-button size="large" class="primary-btn" @click="dealWith('createTemp')">新建模板</el-button>
           <el-button size="large" class="primary-btn" @click="dealWith('save')">保存</el-button>
           <el-button ref="ref4" size="large" class="primary-btn" plain type="primary" @click="dealWith('download')">下载作品</el-button>
         </HeaderOptions>
@@ -148,7 +149,7 @@ function jump2home() {
 
 const undoable = computed(() => {
   return !(
-    dHistoryParams.value.index === -1 || 
+    dHistoryParams.value.index === -1 ||
     (dHistoryParams.value.index === 0 && dHistoryParams.value.length === dHistoryParams.value.maxLength))
 })
 
@@ -217,7 +218,7 @@ function loadData() {
     if (!zoomControlRef.value) return
     // await nextTick()
     // zoomControlRef.value.screenChange()
-    
+
     // 初始化激活的控件为page
     widgetStore.selectWidget({ uuid: '-1' })
     // store.dispatch('selectWidget', { uuid: '-1' })
@@ -242,6 +243,9 @@ const fns: any = {
   },
   save: () => {
     optionsRef.value?.save(false)
+  },
+  createTemp: () => {
+    optionsRef.value?.createTemp()
   },
   download: () => {
     optionsRef.value?.download()

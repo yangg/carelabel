@@ -22,7 +22,7 @@ module.exports = {
      * @apiParam {String|Number} id (必传) 截图id
      * @apiParam {String} type 可选, file源文件，cover封面图
      */
-    
+
     const isDev = process.env.NODE_ENV === 'development'
     let { id, type = 'file' } = req.query
     const path = filePath + `${id}-screenshot.png`
@@ -68,6 +68,7 @@ module.exports = {
         return
       }
       const targetUrl = url + id + `${tempType?'&tempType='+tempType:''}`
+      console.log(11, targetUrl, width, height, path, thumbPath, size, quality)
       queueRun(saveScreenshot, targetUrl, { width, height, path, thumbPath, size, quality })
         .then(() => {
           res.setHeader('Content-Type', 'image/jpg')

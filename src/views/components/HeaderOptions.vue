@@ -37,7 +37,14 @@ import { useFontStore } from '@/common/methods/fonts'
 // import copyRight from './CopyRight.vue'
 import _config from '@/config'
 import useConfirm from '@/common/methods/confirm'
-import { useControlStore, useHistoryStore, useCanvasStore, useUserStore, useWidgetStore } from '@/store/index'
+import {
+  useControlStore,
+  useHistoryStore,
+  useCanvasStore,
+  useUserStore,
+  useWidgetStore,
+  useForceStore
+} from '@/store/index'
 import { storeToRefs } from 'pinia'
 
 type TProps = {
@@ -71,6 +78,7 @@ const canvasImage = ref<typeof SaveImage | null>(null)
 const pageStore = useCanvasStore()
 const controlStore = useControlStore()
 const historyStore = useHistoryStore()
+const forceStore = useForceStore()
 
 const { dPage } = storeToRefs(pageStore)
 const { tempEditing } = storeToRefs(userStore)
@@ -90,7 +98,7 @@ async function save(hasCover: boolean = false) {
   if (dHistory.value.length <= 0) {
     return
   }
-  
+
   // store.commit('setShowMoveable', false) // 清理掉上一次的选择框
   controlStore.setShowMoveable(false) // 清理掉上一次的选择框
 
@@ -98,10 +106,80 @@ async function save(hasCover: boolean = false) {
   const { id, tempid } = route.query
   const cover = hasCover ? await draw() : undefined
   const widgets = dWidgets.value // reviseData()
-  const { id: newId, stat, msg } = await api.home.saveWorks({ cover, id: (id as string), title: state.title || '未命名设计', data: { page: dPage.value, widgets }, temp_id: (tempid as string), width: dPage.value.width, height: dPage.value.height })
+  const { id: newId, stat, msg } = await api.home.saveWorks({ cover, id: (tempid as string), title: state.title || '未命名设计', data: { page: dPage.value, widgets }, width: dPage.value.width, height: dPage.value.height })
   stat !== 0 ? useNotification('保存成功', '可在"我的作品"中查看') : useNotification('保存失败', msg, { type: 'error' })
-  !id && router.push({ path: '/home', query: { id: newId }, replace: true })
+  !tempid && router.push({ path: '/home', query: { tempid: newId }, replace: true })
   controlStore.setShowMoveable(true)
+}
+
+async function createTemp() {
+  // new page
+  const page = {
+    "name": "作品名",
+    "type": "page",
+    "uuid": "-1",
+    "left": 0,
+    "top": 0,
+    "width": 400,
+    "height": 900,
+    "backgroundColor": "#ffffffff",
+    "backgroundImage": "",
+    "opacity": 1,
+    "tag": 0,
+    "setting": [],
+    "record": {}
+  }
+  const widgets = [
+    {
+      "name": "文本",
+      "type": "w-text",
+      "uuid": "f772ecbfd50e",
+      "editable": false,
+      "left": 20,
+      "top": 20,
+      "transform": "",
+      "lineHeight": 1.5,
+      "letterSpacing": 0,
+      "fontSize": 60,
+      "zoom": 1,
+      "fontClass": {
+        "alias": "站酷快乐体",
+        "id": 543,
+        "value": "zcool-kuaile-regular",
+        "url": "https://lib.baomitu.com/fonts/zcool-kuaile/zcool-kuaile-regular.woff2"
+      },
+      "fontFamily": "SourceHanSansSC-Regular",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "writingMode": "horizontal-tb",
+      "textDecoration": "none",
+      "color": "#000000ff",
+      "textAlign": "left",
+      "text": "双击编辑文字",
+      "opacity": 1,
+      "backgroundColor": "",
+      "parent": "-1",
+      "record": {
+        "width": 360,
+        "height": 90,
+        "minWidth": 60,
+        "minHeight": 90,
+        "dir": "horizontal"
+      },
+      "width": 360,
+      "height": 90
+    }
+  ]
+  pageStore.setDPage(page)
+  widgetStore.setDWidgets([])
+  widgetStore.setTemplate(widgets)
+  setTimeout(() => {
+    forceStore.setZoomScreenChange()
+  }, 300)
+  widgetStore.selectWidget({
+    uuid: '-1',
+  })
+  router.push({ path: '/home', query: {  }, replace: true })
 }
 
     // 保存模板
@@ -203,7 +281,7 @@ async function load(id: number, tempId: number, type: number, cb: () => void) {
     state.stateBollean = !!_state
     state.title = title
     controlStore.setShowMoveable(false) // 清理掉上一次的选择框
-    
+
     // this.$store.commit('setDWidgets', [])
     if (type == 1) {
       // 加载文字组合组件
@@ -233,6 +311,7 @@ function draw() {
 defineExpose({
   download,
   save,
+  createTemp,
   saveTemp,
   stateChange,
   load,
