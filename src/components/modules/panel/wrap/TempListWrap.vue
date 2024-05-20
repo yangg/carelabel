@@ -98,6 +98,9 @@ const load = async (init: boolean = false, stat?: string) => {
   const res = await api.home.getTempList({ search: state.searchKeyword, ...pageOptions })
   res.list.length <= 0 && (state.loadDone = true)
   state.list = state.list.concat(res.list)
+  if(res.total <= state.list.length) {
+    state.loadDone = true
+  }
   setTimeout(() => {
     state.loading = false
     checkHeight()
@@ -130,7 +133,8 @@ async function selectItem(item: IGetTempListData) {
   }
   userStore.managerEdit(false)
   widgetStore.setDWidgets([])
-  setTempId(item.id)
+  // setTempId(item.id)
+  router.push({ path: '/home', query: { id: item.id }, replace: true })
 
   let result = null
   if (!item.data) {
@@ -139,7 +143,7 @@ async function selectItem(item: IGetTempListData) {
   } else {
     result = JSON.parse(item.data)
   }
-  const { page, widgets } = result
+  const { page, widgets } = Array.isArray(result) ? { page: result[0].global, widgets: result[0].layers} : result
   pageStore.setDPage(page)
   widgetStore.setTemplate(widgets)
   setTimeout(() => {

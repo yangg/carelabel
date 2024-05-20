@@ -47,7 +47,7 @@ const props = withDefaults(
 )
 const dialogVisible: Ref<boolean> = ref(false)
 const isAdaptive: Ref<boolean> = ref(true)
-const page: any = ref({ width: 100, height: 100 })
+const page: any = ref({ width: 400, height: 900 })
 
 const applySize = ({ width, height }: any) => {
   page.value.width = width

@@ -1,7 +1,7 @@
 <!--
  * @Author: ShawnPhang
  * @Date: 2023-09-18 17:34:44
- * @Description: 
+ * @Description:
  * @LastEditors: ShawnPhang <https://m.palxp.cn>
  * @LastUpdateContent: Support typescript
  * @LastEditTime: 2024-05-19 05:19:03
@@ -25,6 +25,7 @@
           <el-divider direction="vertical" />
         </div>
         <HeaderOptions ref="optionsRef" v-model="state.isContinue" @change="optionsChange">
+          <el-button size="large" class="primary-btn" @click="dealWith('newDesign')">{{ $t('header.btnNew') }}</el-button>
           <el-button size="large" class="primary-btn" @click="dealWith('save')">{{ $t('header.save') }}</el-button>
           <el-button ref="ref4" size="large" class="primary-btn" plain type="primary" @click="dealWith('download')">{{ $t('header.download') }}</el-button>
         </HeaderOptions>
@@ -153,7 +154,7 @@ function jump2home() {
 const undoable = computed(() => {
   return dHistoryParams.value.stackPointer >= 0
   // return !(
-  //   dHistoryParams.value.index === -1 || 
+  //   dHistoryParams.value.index === -1 ||
   //   (dHistoryParams.value.index === 0 && dHistoryParams.value.length === dHistoryParams.value.maxLength))
 })
 
