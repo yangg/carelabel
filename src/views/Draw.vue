@@ -47,44 +47,27 @@ onMounted(() => {
   })
 })
 
+let dom = document.createElement('div')
+function calcHeight(widget) {
+  document.body.appendChild(dom)
+  dom.style.cssText = `position: fixed; top: 100vh;width: ${widget.width}px;font: ${widget.fontSize}px/${widget.lineHeight} ${widget.fontFamily};`
+  dom.textContent = widget.text
+  return dom.offsetHeight;
+}
+
 async function load() {
   let backgroundImage = ''
   let loadFlag = false
-  const { id, tempid, tempType: type  } = route.query 
+  const { id, tempid, tempType: type  } = route.query
   if (id || tempid) {
     const postData = {
       id: Number(id || tempid),
       type: Number(type)
     }
-    const { data, width, height } = await api.home[id ? 'getWorks' : 'getTempDetail'](postData)
-    const content = JSON.parse(data)
+    const { data: content, width, height } = await api.home[id ? 'getWorks' : 'getTempDetail'](postData)
     const widgets = Number(type) == 1 ? content : content.widgets
 
-    if (Number(type) == 1) {
-      dPage.value.width = width
-      dPage.value.height = height
-      dPage.value.backgroundColor = '#ffffff00'
-      widgetStore.addGroup(content)
-      // store.dispatch('addGroup', content)
-      // addGroup(content)
-    } else {
-      pageStore.setDPage(content.page)
-      // store.commit('setDPage', content.page)
-      // 移除背景图，作为独立事件
-      backgroundImage = content.page?.backgroundImage
-      backgroundImage && delete content.page.backgroundImage
-      pageStore.setDPage(content.page)
-      // store.commit('setDPage', content.page)
-      if (id) {
-        widgetStore.setDWidgets(widgets)
-        // store.commit('setDWidgets', widgets)
-      } else {
-        widgetStore.setTemplate(widgets)
-        // store.dispatch('setTemplate', widgets)
-      }
-    }
 
-    await nextTick()
 
     const imgsData: HTMLImageElement[] = []
     const svgsData: HTMLImageElement[] = []
@@ -144,6 +127,50 @@ async function load() {
       // console.log(e)
     }
     loadFlag = true
+
+    if (Number(type) == 1) {
+      dPage.value.width = width
+      dPage.value.height = height
+      dPage.value.backgroundColor = '#ffffff00'
+      widgetStore.addGroup(content)
+      // store.dispatch('addGroup', content)
+      // addGroup(content)
+    } else {
+      console.log('xxx', widgets)
+      let addHeight = 0
+      let maxHeight = 0
+      // TODO: sort widget by top
+      widgets.forEach((item: any) => {
+        if (item.type === 'w-text') {
+          item.top += addHeight
+          const detectHeight = calcHeight(item)
+          console.log('detectHeight', detectHeight)
+          if (detectHeight > item.height) {
+            addHeight += detectHeight - item.height
+          }
+          item.height = detectHeight
+          maxHeight = item.top + item.height
+        }
+      })
+      content.page.height = maxHeight
+
+      pageStore.setDPage(content.page)
+      // store.commit('setDPage', content.page)
+      // 移除背景图，作为独立事件
+      backgroundImage = content.page?.backgroundImage
+      backgroundImage && delete content.page.backgroundImage
+      pageStore.setDPage(content.page)
+      // store.commit('setDPage', content.page)
+      if (id) {
+        widgetStore.setDWidgets(widgets)
+        // store.commit('setDWidgets', widgets)
+      } else {
+        widgetStore.setTemplate(widgets)
+        // store.dispatch('setTemplate', widgets)
+      }
+    }
+
+    await nextTick()
     console.log('--> now u can start screenshot!')
     setTimeout(() => {
       try {
