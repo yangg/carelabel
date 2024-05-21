@@ -45,10 +45,18 @@ onMounted(() => {
   })
 })
 
+let dom = document.createElement('div')
+function calcHeight(widget) {
+  document.body.appendChild(dom)
+  dom.style.cssText = `position: fixed; top: 100vh;width: ${widget.width}px;font: ${widget.fontSize}px/${widget.lineHeight} ${widget.fontFamily};`
+  dom.textContent = widget.text
+  return dom.offsetHeight;
+}
+
 async function load() {
   let backgroundImage = ''
   let loadFlag = false
-  const { id, tempid, tempType: type = 0, index = 0  }: any = route.query 
+  const { id, tempid, tempType: type = 0, index = 0  }: any = route.query
   if (id || tempid) {
     const postData = {
       id: Number(id || tempid),
@@ -142,6 +150,30 @@ async function load() {
       // console.log(e)
     }
     loadFlag = true
+    // calc height after font loaded
+    if (!isGroupTemplate) {
+      console.log('xxx', widgets)
+      let addHeight = 0
+      let maxHeight = 0
+      // TODO: sort widget by top
+      widgets.forEach((item: any) => {
+        if (item.type === 'w-text') {
+          item.top += addHeight
+          const detectHeight = calcHeight(item)
+          console.log('detectHeight', detectHeight)
+          if (detectHeight > item.height) {
+            addHeight += detectHeight - item.height
+          }
+          item.height = detectHeight
+          maxHeight = item.top + item.height
+        }
+      })
+      dPage.value.height = maxHeight
+
+      widgetStore.setDWidgets(widgets)
+    }
+
+    await nextTick()
     console.log('--> now u can start screenshot!')
     setTimeout(() => {
       try {
